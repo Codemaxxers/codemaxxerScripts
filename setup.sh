@@ -1,13 +1,7 @@
 #!/bin/bash
 
 # Make cool codemaxxers logo here
-echo "     ___    ___    __  __     ___    __  __   "
-echo "    / __|  / _ \  |  \/  |   / __|  |  \/  |  "
-echo "   | (__  | (_) | | |\/| |  | (__   | |\/| |  "
-echo "    \___|  \___/  |_|__|_|   \___|  |_|__|_|  "
-echo "  _|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"| "
-echo "  \"`-0-0-\'\"`-0-0-\'\"`-0-0-\'\"`-0-0-\'\"`-0-0-' "
-echo "Setup Script Initialized"
+
 
 # Here, check to see if /deployments exists. If it doesn't exist, create it (this script will be run with sudo)
 if [ ! -d "/deployments" ]; then
@@ -17,6 +11,11 @@ fi
 # Here, check to see if the directory /deployments/codemaxxers exists. If not, create it
 if [ ! -d "/deployments/codemaxxers" ]; then
     mkdir /deployments/codemaxxers
+fi
+
+# Here, check to see if the directory /deployments/codemaxxers/data exists. If not, create it
+if [ ! -d "/deployments/codemaxxers/data" ]; then
+    mkdir /deployments/codemaxxers/data
 fi
 
 # Here, change directory to /deployments/codemaxxers and git clone the following links:
@@ -39,12 +38,15 @@ for file in /deployments/codemaxxers/codemaxxerScripts/data/sites-available/*; d
     ln -s /etc/nginx/sites-available/"$filename" /etc/nginx/sites-enabled/"$filename"
 done
 
+# Permissions
+chmod +x /deployments/codemaxxers/codemaxxerScripts/*
+
 # Add your custom commands for the backend and connections repositories
 cd /deployments/codemaxxers/codemaxxerBackend
-# Add your command here
+docker-compose up -d --build
 
 cd /deployments/codemaxxers/codemaxxerConnections
-# Add your command here
+docker-compose up -d --build
 
 # Check Nginx configuration and restart Nginx
 nginx -t
